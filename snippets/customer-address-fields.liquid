@@ -5,12 +5,12 @@
 
 <div class="customer-page__field">
   <label for="Address_FirstName_{{ form.id }}" class="customer-page__label">First Name</label>
-  <input type="text" name="address[first_name]" id="Address_FirstName_{{ form.id }}" class="customer-page__input" value="{{ form_address.first_name }}" autocomplete="given-name">
+  <input type="text" name="address[first_name]" id="Address_FirstName_{{ form.id }}" class="customer-page__input" value="{{ form_address.first_name }}" autocomplete="given-name" required>
 </div>
 
 <div class="customer-page__field">
   <label for="Address_LastName_{{ form.id }}" class="customer-page__label">Last Name</label>
-  <input type="text" name="address[last_name]" id="Address_LastName_{{ form.id }}" class="customer-page__input" value="{{ form_address.last_name }}" autocomplete="family-name">
+  <input type="text" name="address[last_name]" id="Address_LastName_{{ form.id }}" class="customer-page__input" value="{{ form_address.last_name }}" autocomplete="family-name" required>
 </div>
 
 <div class="customer-page__field">
@@ -20,7 +20,7 @@
 
 <div class="customer-page__field">
   <label for="Address_Address1_{{ form.id }}" class="customer-page__label">Address</label>
-  <input type="text" name="address[address1]" id="Address_Address1_{{ form.id }}" class="customer-page__input" value="{{ form_address.address1 }}" autocomplete="address-line1">
+  <input type="text" name="address[address1]" id="Address_Address1_{{ form.id }}" class="customer-page__input" value="{{ form_address.address1 }}" autocomplete="address-line1" required>
 </div>
 
 <div class="customer-page__field">
@@ -31,11 +31,11 @@
 <div class="customer-page__field-row">
   <div class="customer-page__field">
     <label for="Address_City_{{ form.id }}" class="customer-page__label">City</label>
-    <input type="text" name="address[city]" id="Address_City_{{ form.id }}" class="customer-page__input" value="{{ form_address.city }}" autocomplete="address-level2">
+    <input type="text" name="address[city]" id="Address_City_{{ form.id }}" class="customer-page__input" value="{{ form_address.city }}" autocomplete="address-level2" required>
   </div>
   <div class="customer-page__field">
     <label for="Address_Country_{{ form.id }}" class="customer-page__label">Country</label>
-    <select name="address[country]" id="Address_Country_{{ form.id }}" class="customer-page__input" data-default="{{ form_address.country }}">
+    <select name="address[country]" id="Address_Country_{{ form.id }}" class="customer-page__input" data-default="{{ form_address.country }}" required>
       {{ all_country_option_tags }}
     </select>
   </div>

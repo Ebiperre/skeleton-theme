@@ -285,6 +285,9 @@
       });
     }
 
+    // Capture original button text before any variant changes
+    var addBtnText = addBtnWrap ? (addBtnWrap.querySelector('.pdp__add-btn')?.textContent.trim() || 'Add to Drop') : 'Add to Drop';
+
     function updateVariantUI(variant) {
       // Update hidden select
       if (variantSelect) variantSelect.value = variant ? variant.id : '';
@@ -305,7 +308,7 @@
       // Update add-to-cart button
       if (addBtnWrap && variant) {
         if (variant.available) {
-          addBtnWrap.innerHTML = '<button type="submit" class="btn btn--primary pdp__add-btn" id="PdpAddBtn">' + (document.querySelector('[data-add-text]')?.dataset.addText || 'Add to Drop') + '</button>';
+          addBtnWrap.innerHTML = '<button type="submit" class="btn btn--primary pdp__add-btn" id="PdpAddBtn">' + addBtnText + '</button>';
         } else {
           addBtnWrap.innerHTML = '<button type="button" class="btn btn--secondary pdp__add-btn" id="PdpAddBtn" disabled>Sold Out</button>';
         }

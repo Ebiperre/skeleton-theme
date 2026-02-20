@@ -14,7 +14,7 @@
       "type": "category-grid",
       "blocks": {
         "cat-1": { "type": "category", "settings": { "title": "Shoes", "asset_image": "shoes.png" } },
-        "cat-2": { "type": "category", "settings": { "title": "Collectables" } },
+        "cat-2": { "type": "category", "settings": { "title": "Collectables", "asset_image": "collectibles.png" } },
         "cat-3": { "type": "category", "settings": { "title": "Pre-Orders" } },
         "cat-4": { "type": "category", "settings": { "title": "Clothing" } }
       },
@@ -38,12 +38,12 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "subtitle": "",
-        "heading": "",
+        "subtitle": "New Arrivals",
+        "heading": "Latest Drop",
         "collection": "all",
         "products_to_show": 10,
         "columns_desktop": "4",
-        "show_view_all": false
+        "show_view_all": true
       }
     },
     "community": {

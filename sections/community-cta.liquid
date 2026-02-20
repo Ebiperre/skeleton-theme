@@ -23,7 +23,7 @@
       {% endif %}
     </div>
 
-    {% if section.settings.button_text != blank %}
+    {% if section.settings.button_text != blank and section.settings.button_link != blank %}
       <a href="{{ section.settings.button_link }}" class="community-cta__btn" target="_blank" rel="noopener">
         {{ section.settings.button_text }}
       </a>
