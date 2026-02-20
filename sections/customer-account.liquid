@@ -1,0 +1,81 @@
+{% comment %}
+  HypeHeat Customer Account Dashboard
+  Order history and account details.
+{% endcomment %}
+
+<div class="customer-page customer-page--wide">
+  <div class="customer-page__header">
+    <h1 class="customer-page__title">My Account</h1>
+    <a href="{{ routes.account_logout_url }}" class="customer-page__link">Log out</a>
+  </div>
+
+  <div class="customer-account__grid">
+    <div class="customer-account__orders">
+      <h2 class="customer-page__subtitle">Order History</h2>
+
+      {% if customer.orders.size > 0 %}
+        <div class="customer-account__table-wrap">
+          <table class="customer-account__table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in customer.orders %}
+                <tr>
+                  <td>
+                    <a href="{{ order.customer_url }}" class="customer-account__order-link">{{ order.name }}</a>
+                  </td>
+                  <td>{{ order.created_at | date: '%b %d, %Y' }}</td>
+                  <td>
+                    <span class="customer-account__status">{{ order.financial_status_label }}</span>
+                  </td>
+                  <td>{{ order.total_net_amount | money }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        {% paginate customer.orders by 20 %}
+          {% if paginate.pages > 1 %}
+            <div class="customer-account__pagination">
+              {{ paginate | default_pagination }}
+            </div>
+          {% endif %}
+        {% endpaginate %}
+      {% else %}
+        <p class="customer-page__note">You haven't placed any orders yet.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary" style="margin-top: 16px;">Start Shopping</a>
+      {% endif %}
+    </div>
+
+    <div class="customer-account__details">
+      <h2 class="customer-page__subtitle">Account Details</h2>
+      <p class="customer-account__name">{{ customer.name }}</p>
+      <p class="customer-account__email">{{ customer.email }}</p>
+
+      {% if customer.default_address %}
+        <div class="customer-account__address">
+          <p class="customer-page__label">Default Address</p>
+          {{ customer.default_address | format_address }}
+        </div>
+      {% endif %}
+
+      <a href="{{ routes.account_addresses_url }}" class="customer-page__link" style="margin-top: 12px; display: inline-block;">
+        View Addresses ({{ customer.addresses_count }})
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Account",
+  "settings": []
+}
+{% endschema %}

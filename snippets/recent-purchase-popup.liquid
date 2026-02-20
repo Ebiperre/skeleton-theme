@@ -1,13 +1,13 @@
 {% comment %}
   Recently Purchased Popup — FOMO notification toast
-  Shows fake "X just bought Y" notifications at intervals.
+  Pulls real products from the store and shows "X just bought Y" at intervals.
 {% endcomment %}
 
 <div class="recent-purchase" id="RecentPurchase" aria-live="polite" hidden>
   <button class="recent-purchase__close" aria-label="Close" onclick="this.parentElement.hidden=true">&times;</button>
   <p class="recent-purchase__title">RECENTLY PURCHASED</p>
   <div class="recent-purchase__content">
-    <div class="recent-purchase__img" id="RecentPurchaseImg"></div>
+    <img class="recent-purchase__img" id="RecentPurchaseImg" src="" alt="" loading="lazy">
     <div class="recent-purchase__details">
       <span class="recent-purchase__name" id="RecentPurchaseName"></span>
       <strong class="recent-purchase__product" id="RecentPurchaseProduct"></strong>
@@ -15,3 +15,15 @@
     </div>
   </div>
 </div>
+
+<script>
+  window.__recentProducts = [
+    {%- for product in collections.all.products limit: 20 -%}
+      {
+        "title": {{ product.title | json }},
+        "image": {{ product.featured_image | image_url: width: 120, height: 120, crop: 'center' | json }},
+        "url": {{ product.url | json }}
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ];
+</script>

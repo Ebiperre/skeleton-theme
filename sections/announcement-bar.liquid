@@ -1,4 +1,4 @@
-{% if section.settings.text != blank %}
+{% if section.settings.text != blank or section.settings.countdown_date != blank %}
   <div class="announcement-bar" role="region" aria-label="Announcement">
     <div class="announcement-bar__inner">
       <p class="announcement-bar__text">
@@ -6,6 +6,13 @@
           <a href="{{ section.settings.link }}">{{ section.settings.text }}</a>
         {% else %}
           {{ section.settings.text }}
+        {% endif %}
+
+        {% if section.settings.countdown_date != blank %}
+          <span class="announcement-bar__countdown" id="AnnouncementCountdown"
+            data-target="{{ section.settings.countdown_date }}"
+            data-live-text="{{ section.settings.countdown_live_text | default: 'THE DROP IS LIVE' }}"
+          ></span>
         {% endif %}
       </p>
     </div>
@@ -20,12 +27,28 @@
       "type": "text",
       "id": "text",
       "label": "Text",
-      "default": "TRY SHOPIFY FREE • GET YOUR FIRST 3 MONTHS FOR ONLY $1/MONTH"
+      "default": "FREE SHIPPING ON ORDERS OVER $150"
     },
     {
       "type": "url",
       "id": "link",
       "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Drop Countdown"
+    },
+    {
+      "type": "text",
+      "id": "countdown_date",
+      "label": "Countdown target date",
+      "info": "ISO format: 2026-03-01T12:00:00 (leave blank to hide timer)"
+    },
+    {
+      "type": "text",
+      "id": "countdown_live_text",
+      "label": "Text when countdown ends",
+      "default": "THE DROP IS LIVE"
     }
   ],
   "presets": [

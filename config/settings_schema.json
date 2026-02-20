@@ -83,6 +83,17 @@
     ]
   },
   {
+    "name": "Exit-Intent Popup",
+    "settings": [
+      {
+        "type": "text",
+        "id": "exit_discount_code",
+        "label": "Discount code",
+        "info": "Leave blank to disable the exit-intent popup. Code must exist in Shopify Discounts."
+      }
+    ]
+  },
+  {
     "name": "Shipping",
     "settings": [
       {

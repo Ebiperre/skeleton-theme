@@ -1,37 +1,103 @@
 {% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
+  HypeHeat Cart Page
+  Full-page cart with product images, quantity controls, shipping bar, and checkout.
 {% endcomment %}
 
-<h1>{{ 'cart.title' | t }}</h1>
+<div class="cart-page">
+  {% if cart.item_count > 0 %}
+    <div class="cart-page__header">
+      <h1 class="cart-page__title">Your Cart</h1>
+      <p class="cart-page__count">{{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}</p>
+    </div>
 
-<form action="{{ routes.cart_url }}" method="post">
-  <table>
-    {% for item in cart.items %}
-      <tr>
-        <td>
-          {% render 'image', image: item.image, url: item.url %}
-        </td>
-        <td>
-          <p>{{ item.product.title }}</p>
-          {{ 'cart.remove' | t | link_to: item.url_to_remove }}
-        </td>
-        <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
-          <input type="submit" value="{{ 'cart.update' | t }}">
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+    <div class="cart-page__shipping" id="CartPageShipping">
+      {% assign threshold = settings.free_shipping_threshold | default: 150 | times: 100 %}
+      {% if cart.total_price >= threshold %}
+        <p class="cart-page__shipping-text">You've unlocked <strong>FREE SHIPPING</strong></p>
+      {% else %}
+        {% assign remaining = threshold | minus: cart.total_price %}
+        <p class="cart-page__shipping-text">Spend <strong>{{ remaining | money }}</strong> more for <strong>FREE SHIPPING</strong></p>
+      {% endif %}
+      <div class="cart-page__shipping-bar">
+        {% assign progress = cart.total_price | times: 100 | divided_by: threshold %}
+        {% if progress > 100 %}{% assign progress = 100 %}{% endif %}
+        <div class="cart-page__shipping-fill" style="width: {{ progress }}%"></div>
+      </div>
+    </div>
 
-  <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-</form>
+    <form action="{{ routes.cart_url }}" method="post" id="CartPageForm">
+      <div class="cart-page__items">
+        {% for item in cart.items %}
+          <div class="cart-page__item" data-line="{{ forloop.index }}">
+            <a href="{{ item.url }}" class="cart-page__item-image-link">
+              {% if item.image %}
+                {{ item.image | image_url: width: 200, height: 260, crop: 'center' | image_tag: class: 'cart-page__item-image', loading: 'lazy' }}
+              {% else %}
+                <div class="cart-page__item-placeholder"></div>
+              {% endif %}
+            </a>
+
+            <div class="cart-page__item-details">
+              <div class="cart-page__item-top">
+                <a href="{{ item.url }}" class="cart-page__item-title">{{ item.product.title }}</a>
+                {% if item.variant.title != 'Default Title' %}
+                  <p class="cart-page__item-variant">{{ item.variant.title }}</p>
+                {% endif %}
+              </div>
+
+              <div class="cart-page__item-bottom">
+                <div class="cart-page__item-qty">
+                  <button type="button" class="cart-page__qty-btn" data-cart-qty="-1" data-line="{{ forloop.index }}" aria-label="Decrease quantity">&minus;</button>
+                  <input
+                    type="number"
+                    name="updates[]"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    class="cart-page__qty-input"
+                    aria-label="Quantity"
+                  >
+                  <button type="button" class="cart-page__qty-btn" data-cart-qty="1" data-line="{{ forloop.index }}" aria-label="Increase quantity">&plus;</button>
+                </div>
+
+                <div class="cart-page__item-price">
+                  {{ item.final_line_price | money }}
+                  {% if item.original_line_price != item.final_line_price %}
+                    <s class="cart-page__item-compare">{{ item.original_line_price | money }}</s>
+                  {% endif %}
+                </div>
+              </div>
+
+              <button type="button" class="cart-page__item-remove" data-cart-qty="remove" data-line="{{ forloop.index }}">Remove</button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="cart-page__footer">
+        <div class="cart-page__subtotal">
+          <span>Subtotal</span>
+          <span>{{ cart.total_price | money }}</span>
+        </div>
+        <p class="cart-page__taxes-note">Shipping &amp; taxes calculated at checkout</p>
+        <div class="cart-page__actions">
+          <a href="{{ routes.cart_url }}/checkout" class="btn btn--primary cart-page__checkout">Checkout</a>
+          <a href="{{ routes.all_products_collection_url }}" class="cart-page__continue">Continue Shopping</a>
+        </div>
+      </div>
+    </form>
+
+  {% else %}
+    <div class="cart-page__empty">
+      <h1 class="cart-page__title">Your Cart</h1>
+      <p class="cart-page__empty-text">Your cart is empty.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary cart-page__empty-cta">Start Shopping</a>
+    </div>
+  {% endif %}
+</div>
 
 {% schema %}
 {
-  "name": "t:general.cart",
+  "name": "Cart",
   "settings": []
 }
 {% endschema %}

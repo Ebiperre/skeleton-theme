@@ -1,75 +1,101 @@
 {% comment %}
   HypeHeat Footer
-  Dark footer with policy links, newsletter signup, and social icons.
+  Premium dark footer: brand, nav columns, newsletter, social icons, legal.
 {% endcomment %}
 
 <footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__col site-footer__col--links">
-      {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
-      {% endfor %}
+  <div class="site-footer__top">
+    <div class="site-footer__brand">
+      <a href="{{ routes.root_url }}" class="site-footer__logo">{{ shop.name }}</a>
+      {% if section.settings.tagline != blank %}
+        <p class="site-footer__tagline">{{ section.settings.tagline }}</p>
+      {% endif %}
     </div>
 
-    <div class="site-footer__col site-footer__col--links">
-      {% for link in section.settings.menu_2.links %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
-      {% endfor %}
-    </div>
-
-    <div class="site-footer__col site-footer__col--newsletter">
-      {% if section.settings.newsletter_heading != blank %}
-        <p class="site-footer__newsletter-heading">{{ section.settings.newsletter_heading }}</p>
-      {% endif %}
-      {% if section.settings.newsletter_text != blank %}
-        <p class="site-footer__newsletter-text">{{ section.settings.newsletter_text }}</p>
-      {% endif %}
-      {% form 'customer', id: 'footer-newsletter' %}
-        <div class="site-footer__newsletter-form">
-          <input
-            type="email"
-            name="contact[email]"
-            placeholder="Email address"
-            required
-            autocomplete="email"
-            class="site-footer__newsletter-input"
-          >
-          <button type="submit" class="site-footer__newsletter-btn" aria-label="Subscribe">
-            &rarr;
-          </button>
+    <div class="site-footer__columns">
+      {% if section.settings.menu.links.size > 0 %}
+        <div class="site-footer__col">
+          <h4 class="site-footer__col-heading">{{ section.settings.menu.title | default: 'Shop' }}</h4>
+          {% for link in section.settings.menu.links %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {% endfor %}
         </div>
-        {% if form.posted_successfully? %}
-          <p class="site-footer__newsletter-success">Thanks for subscribing.</p>
+      {% endif %}
+
+      {% if section.settings.menu_2.links.size > 0 %}
+        <div class="site-footer__col">
+          <h4 class="site-footer__col-heading">{{ section.settings.menu_2.title | default: 'Info' }}</h4>
+          {% for link in section.settings.menu_2.links %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="site-footer__col site-footer__col--newsletter">
+        {% if section.settings.newsletter_heading != blank %}
+          <h4 class="site-footer__col-heading">{{ section.settings.newsletter_heading }}</h4>
         {% endif %}
-        <input type="hidden" name="contact[tags]" value="newsletter">
-      {% endform %}
+        {% if section.settings.newsletter_text != blank %}
+          <p class="site-footer__newsletter-text">{{ section.settings.newsletter_text }}</p>
+        {% endif %}
+        {% form 'customer', id: 'footer-newsletter' %}
+          <div class="site-footer__newsletter-form">
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="Email address"
+              required
+              autocomplete="email"
+              class="site-footer__newsletter-input"
+            >
+            <button type="submit" class="site-footer__newsletter-btn" aria-label="Subscribe">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </div>
+          {% if form.posted_successfully? %}
+            <p class="site-footer__newsletter-success">Thanks for subscribing.</p>
+          {% endif %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+        {% endform %}
+      </div>
     </div>
   </div>
 
   <div class="site-footer__bottom">
     <div class="site-footer__copyright">
-      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. Powered by Shopify.
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
     </div>
+
+    {% if section.settings.show_social %}
+      <div class="site-footer__social">
+        {% if section.settings.social_instagram != blank %}
+          <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+        {% endif %}
+        {% if section.settings.social_tiktok != blank %}
+          <a href="{{ section.settings.social_tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13.2a8.22 8.22 0 005.58 2.18V12a4.83 4.83 0 01-3.58-1.55V6.69h3.58z"/></svg>
+          </a>
+        {% endif %}
+        {% if section.settings.social_twitter != blank %}
+          <a href="{{ section.settings.social_twitter }}" target="_blank" rel="noopener" aria-label="X">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        {% endif %}
+        {% if section.settings.social_discord != blank %}
+          <a href="{{ section.settings.social_discord }}" target="_blank" rel="noopener" aria-label="Discord">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
 
     {% if section.settings.show_payment_icons %}
       <div class="site-footer__payment">
         {% for type in shop.enabled_payment_types %}
           {{ type | payment_type_svg_tag }}
         {% endfor %}
-      </div>
-    {% endif %}
-
-    {% if section.settings.show_social %}
-      <div class="site-footer__social">
-        {% if section.settings.social_instagram != blank %}
-          <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
-        {% endif %}
-        {% if section.settings.social_tiktok != blank %}
-          <a href="{{ section.settings.social_tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">TK</a>
-        {% endif %}
-        {% if section.settings.social_twitter != blank %}
-          <a href="{{ section.settings.social_twitter }}" target="_blank" rel="noopener" aria-label="X">X</a>
-        {% endif %}
       </div>
     {% endif %}
   </div>
@@ -81,7 +107,17 @@
   "settings": [
     {
       "type": "header",
-      "content": "Links"
+      "content": "Brand"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "No rules. Just texture."
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
     },
     {
       "type": "link_list",
@@ -101,13 +137,13 @@
       "type": "text",
       "id": "newsletter_heading",
       "label": "Heading",
-      "default": "STAY IN THE SILENCE"
+      "default": "Stay in the Loop"
     },
     {
       "type": "textarea",
       "id": "newsletter_text",
       "label": "Text",
-      "default": "No spam. No noise. Just quiet drops, once in a while."
+      "default": "Early access to drops, restocks, and exclusives. No spam."
     },
     {
       "type": "header",
@@ -133,6 +169,11 @@
       "type": "url",
       "id": "social_twitter",
       "label": "X (Twitter) URL"
+    },
+    {
+      "type": "url",
+      "id": "social_discord",
+      "label": "Discord URL"
     },
     {
       "type": "header",

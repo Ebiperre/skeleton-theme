@@ -1,0 +1,22 @@
+{% comment %}
+  Exit-Intent Popup — Discount offer when user tries to leave.
+  Fires on mouseleave (desktop). Once per session via sessionStorage.
+{% endcomment %}
+
+{% if settings.exit_discount_code != blank %}
+  <div class="exit-popup-overlay" id="ExitPopup" aria-hidden="true">
+    <div class="exit-popup">
+      <button class="exit-popup__close" id="ExitPopupClose" aria-label="Close">&times;</button>
+      <p class="exit-popup__eyebrow">WAIT</p>
+      <h2 class="exit-popup__heading">Don't Miss This</h2>
+      <p class="exit-popup__description">Use the code below for a special discount on your order.</p>
+      <button class="exit-popup__code" id="ExitPopupCode" aria-label="Click to copy discount code">
+        {{ settings.exit_discount_code }}
+      </button>
+      <p class="exit-popup__copy-hint" id="ExitPopupHint">Click to copy</p>
+      <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary exit-popup__cta">
+        Continue Shopping
+      </a>
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,120 @@
+{% comment %}
+  HypeHeat Customer Order Detail
+  Individual order view with line items, totals, and addresses.
+{% endcomment %}
+
+<div class="customer-page customer-page--wide">
+  <a href="{{ routes.account_url }}" class="customer-page__back">&larr; Back to Account</a>
+
+  <h1 class="customer-page__title">{{ order.name }}</h1>
+  <p class="customer-page__note">Placed on {{ order.created_at | date: '%B %d, %Y at %I:%M %p' }}</p>
+
+  {% if order.cancelled %}
+    <div class="customer-page__error" style="margin-top: 16px;">
+      Order cancelled on {{ order.cancelled_at | date: '%B %d, %Y' }} — {{ order.cancel_reason_label }}
+    </div>
+  {% endif %}
+
+  <div class="customer-order__items">
+    <table class="customer-account__table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for line_item in order.line_items %}
+          <tr>
+            <td class="customer-order__img-cell">
+              {% if line_item.image %}
+                {{ line_item.image | image_url: width: 100, height: 130, crop: 'center' | image_tag: class: 'customer-order__img' }}
+              {% endif %}
+            </td>
+            <td>
+              <p class="customer-order__product-title">
+                {% if line_item.url != blank %}
+                  <a href="{{ line_item.url }}">{{ line_item.title }}</a>
+                {% else %}
+                  {{ line_item.title }}
+                {% endif %}
+              </p>
+              {% if line_item.variant.title != 'Default Title' %}
+                <p class="customer-order__variant">{{ line_item.variant.title }}</p>
+              {% endif %}
+              {% if line_item.fulfillment %}
+                <p class="customer-order__fulfillment">
+                  Fulfilled {{ line_item.fulfillment.created_at | date: '%b %d' }}
+                  {% if line_item.fulfillment.tracking_url %}
+                    &middot; <a href="{{ line_item.fulfillment.tracking_url }}">Track</a>
+                  {% endif %}
+                </p>
+              {% endif %}
+            </td>
+            <td>{{ line_item.quantity }}</td>
+            <td>{{ line_item.final_line_price | money }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="customer-order__summary">
+    <div class="customer-order__totals">
+      <div class="customer-order__total-line">
+        <span>Subtotal</span>
+        <span>{{ order.line_items_subtotal_price | money }}</span>
+      </div>
+
+      {% for discount_application in order.discount_applications %}
+        <div class="customer-order__total-line customer-order__total-line--discount">
+          <span>Discount ({{ discount_application.title }})</span>
+          <span>-{{ discount_application.total_allocated_amount | money }}</span>
+        </div>
+      {% endfor %}
+
+      {% for shipping_method in order.shipping_methods %}
+        <div class="customer-order__total-line">
+          <span>Shipping ({{ shipping_method.title }})</span>
+          <span>{{ shipping_method.price | money }}</span>
+        </div>
+      {% endfor %}
+
+      {% for tax_line in order.tax_lines %}
+        <div class="customer-order__total-line">
+          <span>Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)</span>
+          <span>{{ tax_line.price | money }}</span>
+        </div>
+      {% endfor %}
+
+      <div class="customer-order__total-line customer-order__total-line--total">
+        <span>Total</span>
+        <span>{{ order.total_net_amount | money }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="customer-order__addresses">
+    <div>
+      <h3 class="customer-page__label">Shipping Address</h3>
+      {% if order.shipping_address %}
+        {{ order.shipping_address | format_address }}
+      {% else %}
+        <p class="customer-page__note">No shipping address</p>
+      {% endif %}
+    </div>
+    <div>
+      <h3 class="customer-page__label">Billing Address</h3>
+      {{ order.billing_address | format_address }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Order",
+  "settings": []
+}
+{% endschema %}

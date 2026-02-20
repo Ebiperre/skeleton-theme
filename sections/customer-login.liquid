@@ -1,0 +1,117 @@
+{% comment %}
+  HypeHeat Customer Login
+  Login form with link to register and password recovery.
+{% endcomment %}
+
+<div class="customer-page">
+  <h1 class="customer-page__title">Login</h1>
+
+  <div class="customer-page__form-wrap">
+    {% form 'customer_login' %}
+      {% if form.errors %}
+        <div class="customer-page__error">
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+
+      <div class="customer-page__field">
+        <label for="CustomerEmail" class="customer-page__label">Email</label>
+        <input
+          type="email"
+          name="customer[email]"
+          id="CustomerEmail"
+          class="customer-page__input"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          required
+        >
+      </div>
+
+      <div class="customer-page__field">
+        <label for="CustomerPassword" class="customer-page__label">Password</label>
+        <input
+          type="password"
+          name="customer[password]"
+          id="CustomerPassword"
+          class="customer-page__input"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn btn--primary customer-page__submit">Sign In</button>
+
+      <div class="customer-page__links">
+        <a href="#recover" id="RecoverLink" class="customer-page__link">Forgot your password?</a>
+        <a href="{{ routes.account_register_url }}" class="customer-page__link">Create account</a>
+      </div>
+    {% endform %}
+
+    {%- comment -%} Password recovery form {%- endcomment -%}
+    <div id="RecoverForm" class="customer-page__recover" style="display: none;">
+      <h2 class="customer-page__subtitle">Reset Your Password</h2>
+      <p class="customer-page__note">We will send you an email to reset your password.</p>
+
+      {% form 'recover_customer_password' %}
+        {% if form.posted_successfully? %}
+          <div class="customer-page__success">
+            If that email address is in our system, you will receive an email with instructions to reset your password.
+          </div>
+        {% endif %}
+
+        {% if form.errors %}
+          <div class="customer-page__error">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="customer-page__field">
+          <label for="RecoverEmail" class="customer-page__label">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="RecoverEmail"
+            class="customer-page__input"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+          >
+        </div>
+
+        <button type="submit" class="btn btn--primary customer-page__submit">Submit</button>
+        <button type="button" id="RecoverCancel" class="customer-page__link" style="margin-top: 12px;">Cancel</button>
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var recoverLink = document.getElementById('RecoverLink');
+    var recoverForm = document.getElementById('RecoverForm');
+    var recoverCancel = document.getElementById('RecoverCancel');
+    var loginForm = recoverForm ? recoverForm.previousElementSibling : null;
+
+    function showRecover() {
+      if (loginForm) loginForm.style.display = 'none';
+      if (recoverForm) recoverForm.style.display = 'block';
+    }
+    function showLogin() {
+      if (loginForm) loginForm.style.display = 'block';
+      if (recoverForm) recoverForm.style.display = 'none';
+    }
+
+    if (recoverLink) recoverLink.addEventListener('click', function (e) { e.preventDefault(); showRecover(); });
+    if (recoverCancel) recoverCancel.addEventListener('click', showLogin);
+    if (window.location.hash === '#recover') showRecover();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Customer Login",
+  "settings": []
+}
+{% endschema %}

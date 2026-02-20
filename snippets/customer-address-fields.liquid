@@ -1,0 +1,66 @@
+{% comment %}
+  Reusable address form fields for customer addresses.
+  Used by the customer-addresses section for new + edit forms.
+{% endcomment %}
+
+<div class="customer-page__field">
+  <label for="Address_FirstName_{{ form.id }}" class="customer-page__label">First Name</label>
+  <input type="text" name="address[first_name]" id="Address_FirstName_{{ form.id }}" class="customer-page__input" value="{{ form_address.first_name }}" autocomplete="given-name">
+</div>
+
+<div class="customer-page__field">
+  <label for="Address_LastName_{{ form.id }}" class="customer-page__label">Last Name</label>
+  <input type="text" name="address[last_name]" id="Address_LastName_{{ form.id }}" class="customer-page__input" value="{{ form_address.last_name }}" autocomplete="family-name">
+</div>
+
+<div class="customer-page__field">
+  <label for="Address_Company_{{ form.id }}" class="customer-page__label">Company (optional)</label>
+  <input type="text" name="address[company]" id="Address_Company_{{ form.id }}" class="customer-page__input" value="{{ form_address.company }}" autocomplete="organization">
+</div>
+
+<div class="customer-page__field">
+  <label for="Address_Address1_{{ form.id }}" class="customer-page__label">Address</label>
+  <input type="text" name="address[address1]" id="Address_Address1_{{ form.id }}" class="customer-page__input" value="{{ form_address.address1 }}" autocomplete="address-line1">
+</div>
+
+<div class="customer-page__field">
+  <label for="Address_Address2_{{ form.id }}" class="customer-page__label">Apartment, suite, etc. (optional)</label>
+  <input type="text" name="address[address2]" id="Address_Address2_{{ form.id }}" class="customer-page__input" value="{{ form_address.address2 }}" autocomplete="address-line2">
+</div>
+
+<div class="customer-page__field-row">
+  <div class="customer-page__field">
+    <label for="Address_City_{{ form.id }}" class="customer-page__label">City</label>
+    <input type="text" name="address[city]" id="Address_City_{{ form.id }}" class="customer-page__input" value="{{ form_address.city }}" autocomplete="address-level2">
+  </div>
+  <div class="customer-page__field">
+    <label for="Address_Country_{{ form.id }}" class="customer-page__label">Country</label>
+    <select name="address[country]" id="Address_Country_{{ form.id }}" class="customer-page__input" data-default="{{ form_address.country }}">
+      {{ all_country_option_tags }}
+    </select>
+  </div>
+</div>
+
+<div class="customer-page__field-row">
+  <div class="customer-page__field">
+    <label for="Address_Province_{{ form.id }}" class="customer-page__label">Province / State</label>
+    <select name="address[province]" id="Address_Province_{{ form.id }}" class="customer-page__input" data-default="{{ form_address.province }}">
+    </select>
+  </div>
+  <div class="customer-page__field">
+    <label for="Address_Zip_{{ form.id }}" class="customer-page__label">Postal / ZIP Code</label>
+    <input type="text" name="address[zip]" id="Address_Zip_{{ form.id }}" class="customer-page__input" value="{{ form_address.zip }}" autocomplete="postal-code">
+  </div>
+</div>
+
+<div class="customer-page__field">
+  <label for="Address_Phone_{{ form.id }}" class="customer-page__label">Phone (optional)</label>
+  <input type="tel" name="address[phone]" id="Address_Phone_{{ form.id }}" class="customer-page__input" value="{{ form_address.phone }}" autocomplete="tel">
+</div>
+
+{% if customer.addresses.size > 0 %}
+  <div class="customer-page__field customer-page__field--checkbox">
+    <input type="checkbox" name="address[default]" id="Address_Default_{{ form.id }}" value="1">
+    <label for="Address_Default_{{ form.id }}" class="customer-page__label">Set as default address</label>
+  </div>
+{% endif %}

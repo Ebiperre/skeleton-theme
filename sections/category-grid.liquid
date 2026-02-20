@@ -6,7 +6,7 @@
   <div class="category-grid__inner">
     {% for block in section.blocks %}
       <a href="{{ block.settings.link }}" class="category-grid__item" {{ block.shopify_attributes }}>
-        {% if block.settings.image != blank %}
+        {% if block.settings.image != blank and block.settings.image.src != blank %}
           {{ block.settings.image | image_url: width: 400, height: 500, crop: 'center' | image_tag: class: 'category-grid__img', loading: 'lazy' }}
         {% elsif block.settings.asset_image != blank %}
           <img src="{{ block.settings.asset_image | asset_url }}" alt="{{ block.settings.title }}" class="category-grid__img" loading="lazy">
@@ -48,6 +48,12 @@
           "type": "image_picker",
           "id": "image",
           "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "asset_image",
+          "label": "Asset image filename (fallback)",
+          "info": "e.g. shoes.png — used if no Image is picked above"
         },
         {
           "type": "url",

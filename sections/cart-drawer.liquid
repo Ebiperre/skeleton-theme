@@ -34,6 +34,11 @@
     </div>
   </div>
 
+  <div class="cart-drawer__timer" id="CartTimer" style="display: none;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+    <span>Your cart is reserved for <strong id="CartTimerDisplay">15:00</strong></span>
+  </div>
+
   <div class="cart-drawer__items" id="CartDrawerItems">
     {% if cart.item_count > 0 %}
       {% for item in cart.items %}

@@ -1,0 +1,80 @@
+{% comment %}
+  HypeHeat Customer Registration
+{% endcomment %}
+
+<div class="customer-page">
+  <h1 class="customer-page__title">Create Account</h1>
+
+  <div class="customer-page__form-wrap">
+    {% form 'create_customer' %}
+      {% if form.errors %}
+        <div class="customer-page__error">
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+
+      <div class="customer-page__field">
+        <label for="FirstName" class="customer-page__label">First Name</label>
+        <input
+          type="text"
+          name="customer[first_name]"
+          id="FirstName"
+          class="customer-page__input"
+          autocomplete="given-name"
+          required
+        >
+      </div>
+
+      <div class="customer-page__field">
+        <label for="LastName" class="customer-page__label">Last Name</label>
+        <input
+          type="text"
+          name="customer[last_name]"
+          id="LastName"
+          class="customer-page__input"
+          autocomplete="family-name"
+          required
+        >
+      </div>
+
+      <div class="customer-page__field">
+        <label for="Email" class="customer-page__label">Email</label>
+        <input
+          type="email"
+          name="customer[email]"
+          id="Email"
+          class="customer-page__input"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          required
+        >
+      </div>
+
+      <div class="customer-page__field">
+        <label for="CreatePassword" class="customer-page__label">Password</label>
+        <input
+          type="password"
+          name="customer[password]"
+          id="CreatePassword"
+          class="customer-page__input"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn btn--primary customer-page__submit">Create</button>
+
+      <div class="customer-page__links">
+        <a href="{{ routes.account_login_url }}" class="customer-page__link">Already have an account? Sign in</a>
+      </div>
+    {% endform %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Register",
+  "settings": []
+}
+{% endschema %}

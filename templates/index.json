@@ -13,7 +13,7 @@
     "categories": {
       "type": "category-grid",
       "blocks": {
-        "cat-1": { "type": "category", "settings": { "title": "Shoes" } },
+        "cat-1": { "type": "category", "settings": { "title": "Shoes", "asset_image": "shoes.png" } },
         "cat-2": { "type": "category", "settings": { "title": "Collectables" } },
         "cat-3": { "type": "category", "settings": { "title": "Pre-Orders" } },
         "cat-4": { "type": "category", "settings": { "title": "Clothing" } }
