@@ -1,0 +1,77 @@
+{% comment %}
+  Split Products — two featured products side by side, editorial layout
+{% endcomment %}
+
+<div class="split-products full-width">
+  <div class="split-products__grid">
+    {% for block in section.blocks limit: 2 %}
+      {% assign product = block.settings.product %}
+      <div class="split-products__item {% if forloop.first %}split-products__item--small{% else %}split-products__item--large{% endif %}" {{ block.shopify_attributes }}>
+        {% if product != blank %}
+          <a href="{{ product.url }}" class="split-products__link">
+            <div class="split-products__media">
+              {% if product.featured_image %}
+                {{ product.featured_image | image_url: width: 800, height: 1000, crop: 'center' | image_tag: class: 'split-products__img', loading: 'lazy' }}
+              {% else %}
+                <div class="split-products__placeholder"></div>
+              {% endif %}
+            </div>
+            <div class="split-products__info">
+              <span class="split-products__label">{{ block.settings.label }}</span>
+              <span class="split-products__price">{{ product.price | money }}</span>
+            </div>
+          </a>
+        {% else %}
+          <div class="split-products__link">
+            <div class="split-products__media">
+              <div class="split-products__placeholder"></div>
+            </div>
+            <div class="split-products__info">
+              <span class="split-products__label">{{ block.settings.label | default: 'Product Title' }}</span>
+              <span class="split-products__price">$0.00</span>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Split Products",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Best Seller"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Products",
+      "blocks": [
+        { "type": "product", "settings": { "label": "Zero Zip" } },
+        { "type": "product", "settings": { "label": "Raw Hoodie" } }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

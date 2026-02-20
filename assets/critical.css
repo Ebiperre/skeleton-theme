@@ -1,9 +1,21 @@
-/** Critical CSS for the theme. This file is included on every page. */
+/**
+ * Critical CSS — HypeHeat
+ * Inlined on every page for fastest first paint.
+ * Matches Horizon-level reset + layout primitives.
+ */
 
-/* Reset styles inspired by https://www.joshwcomeau.com/css/custom-css-reset/ */
-* {
+/* === Reset (Josh Comeau inspired) === */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -11,12 +23,14 @@ body {
   flex-direction: column;
   margin: 0;
   min-height: 100svh;
+  min-height: 100dvh;
 }
 
 html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   overflow: hidden;
 }
 
+/* === Media === */
 img,
 picture,
 video,
@@ -27,26 +41,49 @@ svg {
   height: auto;
 }
 
+img {
+  font-style: italic;
+  vertical-align: middle;
+}
+
+/* === Forms === */
 input,
+button,
 textarea,
 select {
   font: inherit;
-  border-radius: var(--style-border-radius-inputs);
+  color: inherit;
+}
+
+input,
+textarea,
+select {
+  border-radius: var(--style-border-radius-inputs, 0);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
 }
 
 select {
-  background-color: var(--color-background);
+  background-color: var(--color-background, #000);
   color: currentcolor;
 }
 
+/* === Dialog === */
 dialog {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--color-background, #000);
+  color: var(--color-foreground, #fff);
 }
 
+/* === Typography === */
 p {
   text-wrap: pretty;
 }
+
 p,
 h1,
 h2,
@@ -71,26 +108,35 @@ p:empty {
   margin-block-end: 0;
 }
 
-/** Theme styles below */
-body {
-  font-family: var(--font-primary--family);
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+/* Remove list styles on ul, ol with role="list" */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+  padding: 0;
 }
 
-/** Section layout utilities */
+/* Anchor defaults */
+a {
+  color: inherit;
+  text-decoration-skip-ink: auto;
+}
 
-/**
- * Setup a grid that enables both full-width and constrained layouts
- * depending on the class of the child elements.
- *
- * By default, a minimum content margin is set on the left and right
- * sides of the section and the content is centered in the viewport to
- * not exceed the maximum page width.
- *
- * When a child element is given the `full-width` class, it will span
- * the entire viewport.
- */
+/* Remove default table spacing */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* === Theme Body === */
+body {
+  font-family: var(--font-body--family, var(--font-primary--family, sans-serif));
+  font-weight: var(--font-body--weight, 400);
+  font-style: var(--font-body--style, normal);
+  background-color: var(--color-bg, var(--color-background, #000));
+  color: var(--color-fg, var(--color-foreground, #fff));
+}
+
+/* === Section Layout Grid === */
 .shopify-section {
   --content-width: min(
     calc(var(--page-width) - var(--page-margin) * 2),
@@ -99,19 +145,28 @@ body {
   --content-margin: minmax(var(--page-margin), 1fr);
   --content-grid: var(--content-margin) var(--content-width) var(--content-margin);
 
-  /* This is required to make <img> elements work as background images */
   position: relative;
   grid-template-columns: var(--content-grid);
   display: grid;
   width: 100%;
 }
 
-/* Child elements, by default, are constrained to the central column of the grid. */
 .shopify-section > * {
   grid-column: 2;
 }
 
-/* Child elements that use the full-width utility class span the entire viewport. */
 .shopify-section > .full-width {
   grid-column: 1 / -1;
+}
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

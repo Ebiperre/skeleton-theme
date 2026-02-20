@@ -1,0 +1,110 @@
+{% comment %}
+  HypeHeat Sidebar Navigation
+  Fixed 280px left panel on desktop, full-screen overlay on mobile.
+{% endcomment %}
+
+<aside class="sidebar" id="Sidebar" aria-label="Main navigation">
+  <button class="sidebar__close" id="SidebarClose" aria-label="Close menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <a href="{{ routes.root_url }}" class="sidebar__logo">
+    {% if section.settings.logo_text != blank %}
+      {{ section.settings.logo_text }}
+    {% else %}
+      {{ shop.name }}
+    {% endif %}
+  </a>
+
+  <nav class="sidebar__nav" aria-label="Main menu">
+    {% for link in section.settings.menu.links %}
+      <a
+        href="{{ link.url }}"
+        class="sidebar__nav-link"
+        {% if link.current %}aria-current="page"{% endif %}
+      >
+        {{ link.title }}
+      </a>
+    {% endfor %}
+  </nav>
+
+  <div class="sidebar__actions">
+    <a href="{{ routes.search_url }}" class="sidebar__action-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      Search
+    </a>
+
+    {% if shop.customer_accounts_enabled %}
+      <a href="{{ routes.account_url }}" class="sidebar__action-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        Account
+      </a>
+    {% endif %}
+
+    <a href="#" class="sidebar__action-link" id="CartDrawerTrigger" aria-label="Open cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 01-8 0"></path>
+      </svg>
+      Cart
+      <span class="sidebar__cart-count js-cart-count" {% if cart.item_count == 0 %}style="display:none"{% endif %}>
+        {{ cart.item_count }}
+      </span>
+    </a>
+  </div>
+
+  {% if section.settings.show_live_indicator %}
+    <div class="sidebar__live">
+      <span class="sidebar__live-dot" aria-hidden="true"></span>
+      <span><span id="LiveViewerCount">0</span> viewing now</span>
+    </div>
+  {% endif %}
+</aside>
+
+{% schema %}
+{
+  "name": "Sidebar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Branding"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "info": "Leave blank to use shop name"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Social Proof"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_live_indicator",
+      "label": "Show live viewer count",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

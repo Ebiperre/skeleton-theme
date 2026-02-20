@@ -1,20 +1,72 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "subtitle": "New Season",
+        "heading": "The Drop Is Live",
+        "button_text": "Shop the Drop",
+        "section_height": "large",
+        "button_style": "primary"
+      }
+    },
+    "categories": {
+      "type": "category-grid",
+      "blocks": {
+        "cat-1": { "type": "category", "settings": { "title": "Shoes" } },
+        "cat-2": { "type": "category", "settings": { "title": "Collectables" } },
+        "cat-3": { "type": "category", "settings": { "title": "Pre-Orders" } },
+        "cat-4": { "type": "category", "settings": { "title": "Clothing" } }
+      },
+      "block_order": ["cat-1", "cat-2", "cat-3", "cat-4"]
+    },
+    "marquee": {
+      "type": "marquee-text",
+      "settings": {
+        "text": "NO RULES | JUST TEXTURE",
+        "separator": "/"
+      }
+    },
+    "split": {
+      "type": "split-products",
+      "blocks": {
+        "prod-1": { "type": "product", "settings": { "label": "Best Seller" } },
+        "prod-2": { "type": "product", "settings": { "label": "New Drop" } }
+      },
+      "block_order": ["prod-1", "prod-2"]
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "subtitle": "",
+        "heading": "",
+        "collection": "all",
+        "products_to_show": 10,
+        "columns_desktop": "4",
+        "show_view_all": false
+      }
+    },
+    "community": {
+      "type": "community-cta",
+      "settings": {
+        "icon": "discord",
+        "heading": "Join the Community",
+        "description": "Early access to drops, exclusive giveaways, and connect with the crew.",
+        "button_text": "Join Discord"
+      }
+    },
+    "lookbook": {
+      "type": "lookbook-image",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "hero",
+    "categories",
+    "marquee",
+    "split",
+    "featured-collection",
+    "community",
+    "lookbook"
   ]
 }

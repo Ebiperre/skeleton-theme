@@ -1,0 +1,46 @@
+{% comment %}
+  Marquee Text — infinite scrolling text banner
+{% endcomment %}
+
+<div class="marquee-text" aria-hidden="true">
+  <div class="marquee-text__track">
+    {% for i in (1..12) %}
+      <span class="marquee-text__item">{{ section.settings.text }}</span>
+      <span class="marquee-text__separator">{{ section.settings.separator }}</span>
+    {% endfor %}
+  </div>
+  <div class="marquee-text__track" aria-hidden="true">
+    {% for i in (1..12) %}
+      <span class="marquee-text__item">{{ section.settings.text }}</span>
+      <span class="marquee-text__separator">{{ section.settings.separator }}</span>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Marquee Text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "NO RULES | JUST TEXTURE"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "default": "/"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Text"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

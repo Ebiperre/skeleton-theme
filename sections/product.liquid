@@ -1,50 +1,238 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+  HypeHeat Product Detail Page — "The Drop" Layout
+  Large vertical image scroll on left, sticky info column on right.
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
+<div class="pdp full-width">
+  <div class="pdp__images">
+    {% for image in product.images %}
+      {{ image | image_url: width: 1200 | image_tag:
+        class: 'pdp__image',
+        loading: 'lazy',
+        sizes: '(min-width: 768px) 55vw, 100vw'
+      }}
+    {% endfor %}
+  </div>
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
+  <div class="pdp__info">
+    <h1 class="pdp__title">{{ product.title }}</h1>
 
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
+    <div class="pdp__badges">
+      {% if section.settings.show_limited_badge %}
+        <span class="pdp__badge">{{ section.settings.badge_text | default: 'Limited Edition' }}</span>
+      {% endif %}
+      {% unless product.available %}
+        <span class="pdp__badge">Sold Out</span>
+      {% endunless %}
+    </div>
 
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
+    <div class="pdp__price" id="ProductPrice">
+      {% if product.compare_at_price > product.price %}
+        <span style="text-decoration: line-through; color: var(--color-muted); font-size: 0.8em; margin-right: 8px;">
+          {{ product.compare_at_price | money }}
+        </span>
+      {% endif %}
+      {{ product.price | money }}
+    </div>
+
+    {% if section.settings.show_limit_text %}
+      <div class="pdp__limit">{{ section.settings.limit_text | default: 'Limit 1 per customer' }}</div>
+    {% endif %}
+
+    {% if section.settings.show_fomo_viewers or section.settings.show_fomo_cart %}
+      <div class="pdp__fomo">
+        {% if section.settings.show_fomo_viewers %}
+          <div class="pdp__fomo-item pdp__fomo-viewers">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <span class="pdp__fomo-pulse" aria-hidden="true"></span>
+            <span><strong id="FomoViewerCount">0</strong> people viewing this right now</span>
+          </div>
+        {% endif %}
+        {% if section.settings.show_fomo_cart %}
+          <div class="pdp__fomo-item pdp__fomo-cart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 01-8 0"></path>
+            </svg>
+            <span><strong id="FomoCartCount">0</strong> added to cart in the last 24 hours</span>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if product.description != blank %}
+      <div class="pdp__description">{{ product.description }}</div>
+    {% endif %}
+
+    {% form 'product', product, id: 'ProductForm', data-ajax-cart: 'true' %}
+      {% assign current_variant = product.selected_or_first_available_variant %}
+
+      {% if product.variants.size > 1 %}
+        <div class="pdp__variants">
+          <label class="pdp__variant-label" for="ProductVariantSelect">Select Option</label>
+          <select name="id" class="pdp__variant-select" id="ProductVariantSelect">
+            {% for variant in product.variants %}
+              <option
+                value="{{ variant.id }}"
+                {% if variant == current_variant %}selected{% endif %}
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title }}{% unless variant.available %} — Sold Out{% endunless %} — {{ variant.price | money }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      {% else %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {% endif %}
+
+      <div class="pdp__quantity">
+        <label class="pdp__variant-label" for="ProductQuantity">Quantity</label>
+        <input
+          type="number"
+          name="quantity"
+          id="ProductQuantity"
+          class="pdp__quantity-input"
+          min="1"
+          max="{{ section.settings.max_quantity | default: 1 }}"
+          value="1"
         >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+      </div>
 
-    <input type="text" name="quantity" min="1" value="1">
+      {% if current_variant.available %}
+        <button type="submit" class="btn btn--primary pdp__add-btn">
+          {{ section.settings.add_button_text | default: 'Add to Drop' }}
+        </button>
+      {% else %}
+        <button type="button" class="btn btn--secondary pdp__add-btn" disabled>
+          Sold Out
+        </button>
+      {% endif %}
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
+      {% if section.settings.show_dynamic_checkout %}
+        <div class="pdp__payment-buttons">
+          {{ form | payment_button }}
+        </div>
+      {% endif %}
+    {% endform %}
+
+    {% if section.settings.show_reviews %}
+      <div class="pdp__reviews" id="ProductReviews" data-review-count="{{ section.settings.reviews_count | default: 5 }}">
+        <div class="pdp__reviews-header">
+          <h3 class="pdp__reviews-title">Customer Reviews</h3>
+          <div class="pdp__reviews-summary">
+            <span class="pdp__reviews-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="pdp__reviews-avg">5.0</span>
+            <span class="pdp__reviews-count">(<span id="ReviewTotalCount">0</span> reviews)</span>
+          </div>
+        </div>
+        <div class="pdp__reviews-list" id="ReviewsList"></div>
+      </div>
+    {% endif %}
+  </div>
 </div>
 
 {% schema %}
 {
-  "name": "t:general.product",
-  "settings": [],
+  "name": "Product — The Drop",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_limited_badge",
+      "label": "Show limited edition badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Limited Edition"
+    },
+    {
+      "type": "header",
+      "content": "Urgency"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_limit_text",
+      "label": "Show purchase limit text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "limit_text",
+      "label": "Limit text",
+      "default": "Limit 1 per customer"
+    },
+    {
+      "type": "range",
+      "id": "max_quantity",
+      "label": "Max quantity per order",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Social Proof"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fomo_viewers",
+      "label": "Show live viewer count",
+      "default": true,
+      "info": "Displays 'X people viewing this right now'"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fomo_cart",
+      "label": "Show cart activity count",
+      "default": true,
+      "info": "Displays 'X added to cart in the last 24 hours'"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show customer reviews",
+      "default": true,
+      "info": "Displays randomly generated 5-star reviews"
+    },
+    {
+      "type": "range",
+      "id": "reviews_count",
+      "label": "Number of reviews to show",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "add_button_text",
+      "label": "Add to cart button text",
+      "default": "Add to Drop"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Show dynamic checkout button",
+      "default": true,
+      "info": "Shows Apple Pay, Google Pay, etc. when available"
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

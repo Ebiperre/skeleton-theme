@@ -1,0 +1,42 @@
+{% comment %}
+  HypeHeat Newsletter Popup
+  Triggered after interaction delay. Features scrolling HYPEHEAT marquee background.
+  Uses localStorage to suppress for 7 days after dismissal.
+{% endcomment %}
+
+<div class="hype-popup-overlay" id="HypePopup">
+  <div class="hype-popup">
+    <div class="hype-popup__marquee" aria-hidden="true">
+      {% for i in (1..6) %}
+        <div class="hype-popup__marquee-row">
+          {% for j in (1..8) %}
+            <span class="hype-popup__marquee-text">HYPEHEAT</span>
+          {% endfor %}
+          {% for j in (1..8) %}
+            <span class="hype-popup__marquee-text">HYPEHEAT</span>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <button class="hype-popup__close" id="HypePopupClose" aria-label="Close popup">&times;</button>
+
+    <div class="hype-popup__content">
+      <h2 class="hype-popup__title">Join the Drop</h2>
+      <p class="hype-popup__subtitle">Early access. Exclusive releases. No spam.</p>
+
+      <form class="hype-popup__form" id="HypePopupForm">
+        <input
+          type="email"
+          class="hype-popup__input"
+          placeholder="Enter your email"
+          required
+          aria-label="Email address"
+        >
+        <button type="submit" class="btn btn--primary hype-popup__submit">
+          Join
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

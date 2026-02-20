@@ -1,47 +1,29 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+  HypeHeat Collection Grid — Lookbook Style
+  2 columns mobile / 4 columns desktop with product cards.
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+<div class="collection-header full-width">
+  <h1 class="collection-header__title">{{ collection.title }}</h1>
+</div>
 
-<div class="collection-products">
+<div class="collection-grid full-width">
   {% paginate collection.products by 20 %}
     {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
-      </div>
+      {% render 'product-card', product: product %}
     {% endfor %}
 
-    {{ paginate | default_pagination }}
+    {% if paginate.pages > 1 %}
+      <div class="collection-grid__pagination">
+        {{ paginate | default_pagination }}
+      </div>
+    {% endif %}
   {% endpaginate %}
 </div>
 
-{% stylesheet %}
-  .collection-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-  }
-{% endstylesheet %}
-
 {% schema %}
 {
-  "name": "t:general.collection",
+  "name": "Collection Grid",
   "settings": []
 }
 {% endschema %}

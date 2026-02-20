@@ -1,0 +1,56 @@
+{% doc %}
+  HypeHeat Product Card
+  Lookbook-style card with hover image swap, Quick Add, and sold-out tape overlay.
+
+  @param {product} product - The product to render
+{% enddoc %}
+
+{% liquid
+  assign is_sold_out = false
+  unless product.available
+    assign is_sold_out = true
+  endunless
+
+  assign primary_image = product.featured_image
+  assign secondary_image = product.images[1]
+%}
+
+<div class="product-card {% if is_sold_out %}is-sold-out{% endif %}">
+  <div class="product-card__media">
+    <a href="{{ product.url }}">
+      {% if primary_image %}
+        {{ primary_image | image_url: width: 400, height: 500, crop: 'center' | image_tag: class: 'product-card__img product-card__img--primary', loading: 'lazy', sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw' }}
+      {% endif %}
+
+      {% if secondary_image %}
+        {{ secondary_image | image_url: width: 400, height: 500, crop: 'center' | image_tag: class: 'product-card__img product-card__img--secondary', loading: 'lazy', sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw' }}
+      {% endif %}
+    </a>
+
+    {% if is_sold_out %}
+      <span class="product-card__sold-out-tape">Sold Out</span>
+    {% endif %}
+
+    {% unless is_sold_out %}
+      <div class="product-card__quick-add">
+        {% assign first_variant = product.selected_or_first_available_variant %}
+        <button
+          class="btn btn--primary product-card__quick-add-btn"
+          data-variant-id="{{ first_variant.id }}"
+          type="button"
+        >
+          Quick Add
+        </button>
+      </div>
+    {% endunless %}
+  </div>
+
+  <div class="product-card__info">
+    <div class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </div>
+    <div class="product-card__price">
+      {{ product.price | money }}
+    </div>
+  </div>
+</div>

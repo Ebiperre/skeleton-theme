@@ -1,42 +1,38 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Skeleton",
-    "theme_version": "0.1.0",
-    "theme_author": "Shopify",
+    "theme_name": "HypeHeat",
+    "theme_version": "1.0.0",
+    "theme_author": "HypeHeat",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
   },
   {
-    "name": "t:general.typography",
+    "name": "Typography",
     "settings": [
-      {
-        "type": "header",
-        "content": "t:general.fonts"
-      },
       {
         "type": "font_picker",
         "id": "type_primary_font",
         "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "label": "Primary font"
       }
     ]
   },
   {
-    "name": "t:general.layout",
+    "name": "Layout",
     "settings": [
       {
         "type": "select",
         "id": "max_page_width",
-        "label": "t:labels.page_width",
+        "label": "Max page width",
         "options": [
           {
             "value": "90rem",
-            "label": "t:options.page_width.narrow"
+            "label": "Narrow"
           },
           {
             "value": "110rem",
-            "label": "t:options.page_width.wide"
+            "label": "Wide"
           }
         ],
         "default": "90rem"
@@ -48,25 +44,31 @@
         "max": 100,
         "step": 1,
         "unit": "px",
-        "label": "t:labels.page_margin",
+        "label": "Page margin",
         "default": 20
       }
     ]
   },
   {
-    "name": "t:general.colors",
+    "name": "Colors",
     "settings": [
       {
         "type": "color",
+        "id": "accent_color",
+        "default": "#ff3131",
+        "label": "Accent color (Neon Red)"
+      },
+      {
+        "type": "color",
         "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "default": "#000000",
+        "label": "Background color"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
+        "default": "#ffffff",
+        "label": "Text color"
       },
       {
         "type": "range",
@@ -75,8 +77,23 @@
         "max": 10,
         "step": 1,
         "unit": "px",
-        "label": "t:labels.input_corner_radius",
-        "default": 4
+        "label": "Input corner radius",
+        "default": 0
+      }
+    ]
+  },
+  {
+    "name": "Shipping",
+    "settings": [
+      {
+        "type": "range",
+        "id": "free_shipping_threshold",
+        "min": 50,
+        "max": 500,
+        "step": 10,
+        "unit": "$",
+        "label": "Free shipping threshold",
+        "default": 150
       }
     ]
   }

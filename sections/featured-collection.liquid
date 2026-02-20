@@ -1,0 +1,118 @@
+{% comment %}
+  HypeHeat Featured Collection
+  Displays a grid of products from a selected collection.
+  Used on the homepage and any landing page.
+{% endcomment %}
+
+{% assign collection = section.settings.collection %}
+
+<div class="featured-collection full-width">
+  <div class="featured-collection__header">
+    {% if section.settings.subtitle != blank %}
+      <p class="featured-collection__subtitle">{{ section.settings.subtitle }}</p>
+    {% endif %}
+
+    {% if section.settings.heading != blank %}
+      <h2 class="featured-collection__title">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% if collection and section.settings.show_view_all %}
+      <a href="{{ collection.url }}" class="featured-collection__view-all">
+        View All &rarr;
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="featured-collection__grid" style="display:grid; gap:20px 12px; grid-template-columns:repeat(2,1fr);" data-columns="{{ section.settings.columns_desktop }}">
+  <style>
+    @media(min-width:480px){.featured-collection__grid{grid-template-columns:repeat(3,1fr)!important}}
+    @media(min-width:768px){.featured-collection__grid{grid-template-columns:repeat(5,1fr)!important}}
+  </style>
+    {% if collection %}
+      {% for product in collection.products limit: section.settings.products_to_show %}
+        <div class="reveal reveal--fade-up" style="--reveal-delay: {{ forloop.index0 | times: 0.06 }}s">
+          {% render 'product-card', product: product %}
+        </div>
+      {% endfor %}
+    {% else %}
+      {% for i in (1..section.settings.products_to_show) %}
+        <div class="product-card product-card--placeholder reveal reveal--fade-up" style="--reveal-delay: {{ forloop.index0 | times: 0.06 }}s">
+          <div class="product-card__media">
+            <div class="product-card__placeholder"></div>
+          </div>
+          <div class="product-card__info">
+            <div class="product-card__title">Sample Product {{ i }}</div>
+            <div class="product-card__price">$0.00</div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Latest Drop"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Desktop columns",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' link",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
