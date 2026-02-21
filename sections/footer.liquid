@@ -61,6 +61,24 @@
     </div>
   </div>
 
+  <div class="site-footer__legal">
+    {% if shop.privacy_policy %}
+      <a href="{{ shop.privacy_policy.url }}">Privacy Policy</a>
+    {% endif %}
+    {% if shop.terms_of_service %}
+      <a href="{{ shop.terms_of_service.url }}">Terms of Service</a>
+    {% endif %}
+    {% if shop.refund_policy %}
+      <a href="{{ shop.refund_policy.url }}">Refund Policy</a>
+    {% endif %}
+    {% if shop.shipping_policy %}
+      <a href="{{ shop.shipping_policy.url }}">Shipping Policy</a>
+    {% endif %}
+    {% if shop.subscription_policy %}
+      <a href="{{ shop.subscription_policy.url }}">Subscription Policy</a>
+    {% endif %}
+  </div>
+
   <div class="site-footer__bottom">
     <div class="site-footer__copyright">
       &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}

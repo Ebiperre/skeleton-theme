@@ -11,7 +11,7 @@
           <a href="{{ product.url }}" class="split-products__link">
             <div class="split-products__media">
               {% if product.featured_image %}
-                {{ product.featured_image | image_url: width: 800, height: 1000, crop: 'center' | image_tag: class: 'split-products__img', loading: 'lazy' }}
+                {{ product.featured_image | image_url: width: 1000 | image_tag: class: 'split-products__img', loading: 'lazy', sizes: '(min-width: 768px) 50vw, 100vw', alt: product.title }}
               {% else %}
                 <div class="split-products__placeholder"></div>
               {% endif %}

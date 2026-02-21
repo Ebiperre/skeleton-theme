@@ -4,6 +4,12 @@
 {% endcomment %}
 
 <div class="collection-header full-width">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol class="breadcrumbs__list">
+      <li class="breadcrumbs__item"><a href="{{ routes.root_url }}">Home</a></li>
+      <li class="breadcrumbs__item breadcrumbs__item--current" aria-current="page">{{ collection.title }}</li>
+    </ol>
+  </nav>
   <h1 class="collection-header__title">{{ collection.title }}</h1>
 </div>
 

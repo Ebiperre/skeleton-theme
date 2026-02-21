@@ -12,12 +12,22 @@
   <div class="pdp__images">
     <div class="pdp__gallery" id="PdpGallery">
       {% for image in product.images %}
+        {%- if forloop.first -%}
+          {%- assign img_loading = 'eager' -%}
+        {%- else -%}
+          {%- assign img_loading = 'lazy' -%}
+        {%- endif -%}
         <div class="pdp__gallery-slide" data-index="{{ forloop.index0 }}">
           {{ image | image_url: width: 1200 | image_tag:
             class: 'pdp__image',
-            loading: 'lazy',
-            sizes: '(min-width: 768px) 55vw, 100vw'
+            loading: img_loading,
+            sizes: '(min-width: 768px) 55vw, 100vw',
+            alt: image.alt | default: product.title
           }}
+        </div>
+      {% else %}
+        <div class="pdp__gallery-slide">
+          <div class="pdp__placeholder"></div>
         </div>
       {% endfor %}
     </div>
@@ -37,6 +47,19 @@
 
   {%- comment -%} ——— PRODUCT INFO (sticky on desktop) ——— {%- endcomment -%}
   <div class="pdp__info">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol class="breadcrumbs__list">
+        <li class="breadcrumbs__item"><a href="{{ routes.root_url }}">Home</a></li>
+        {% if collection %}
+          <li class="breadcrumbs__item"><a href="{{ collection.url }}">{{ collection.title }}</a></li>
+        {% elsif product.collections.size > 0 %}
+          {%- assign first_collection = product.collections | first -%}
+          <li class="breadcrumbs__item"><a href="{{ first_collection.url }}">{{ first_collection.title }}</a></li>
+        {% endif %}
+        <li class="breadcrumbs__item breadcrumbs__item--current" aria-current="page">{{ product.title }}</li>
+      </ol>
+    </nav>
+
     <h1 class="pdp__title">{{ product.title }}</h1>
 
     <div class="pdp__badges">

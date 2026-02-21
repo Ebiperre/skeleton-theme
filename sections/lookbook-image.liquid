@@ -5,7 +5,7 @@
 <div class="lookbook-image full-width">
   <div class="lookbook-image__media">
     {% if section.settings.image != blank %}
-      {{ section.settings.image | image_url: width: 1600 | image_tag: class: 'lookbook-image__img', loading: 'lazy' }}
+      {{ section.settings.image | image_url: width: 1920 | image_tag: class: 'lookbook-image__img', loading: 'lazy', sizes: '100vw', alt: section.settings.heading }}
     {% else %}
       <div class="lookbook-image__placeholder"></div>
     {% endif %}

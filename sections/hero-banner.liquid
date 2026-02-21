@@ -7,12 +7,13 @@
   class="hero full-width"
   style="min-height: var(--section-height-{{ section.settings.section_height }});"
 >
-  {% if section.settings.background_image %}
+  {% if section.settings.background_image != blank %}
     {{ section.settings.background_image | image_url: width: 1920 | image_tag:
       class: 'hero__bg',
       loading: 'eager',
       fetchpriority: 'high',
-      sizes: '100vw'
+      sizes: '100vw',
+      alt: section.settings.heading
     }}
   {% else %}
     <img src="{{ 'hero.png' | asset_url }}" alt="" class="hero__bg" loading="eager" fetchpriority="high">

@@ -32,13 +32,13 @@
   </nav>
 
   <div class="sidebar__actions">
-    <a href="{{ routes.search_url }}" class="sidebar__action-link">
+    <button type="button" class="sidebar__action-link js-search-trigger">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
       Search
-    </a>
+    </button>
 
     {% if shop.customer_accounts_enabled %}
       <a href="{{ routes.account_url }}" class="sidebar__action-link">

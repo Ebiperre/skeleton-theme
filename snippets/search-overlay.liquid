@@ -1,0 +1,39 @@
+{% comment %}
+  HypeHeat Search Overlay
+  Full-screen floating search with predictive results.
+  Opens on search icon click, fetches results as user types.
+{% endcomment %}
+
+<div class="search-overlay" id="SearchOverlay" aria-hidden="true">
+  <div class="search-overlay__header">
+    <form action="{{ routes.search_url }}" method="get" class="search-overlay__form" role="search">
+      <svg class="search-overlay__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input
+        type="search"
+        name="q"
+        id="SearchInput"
+        class="search-overlay__input"
+        placeholder="Search products..."
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+      >
+      <button type="button" class="search-overlay__close" id="SearchClose" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <div class="search-overlay__results" id="SearchResults">
+    <div class="search-overlay__empty" id="SearchEmpty">
+      <p>Start typing to search...</p>
+    </div>
+  </div>
+</div>

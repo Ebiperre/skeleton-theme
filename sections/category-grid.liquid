@@ -5,9 +5,16 @@
 <div class="category-grid full-width">
   <div class="category-grid__inner">
     {% for block in section.blocks %}
-      <a href="{{ block.settings.link | default: routes.all_products_collection_url }}" class="category-grid__item" {{ block.shopify_attributes }}>
-        {% if block.settings.image != blank and block.settings.image.src != blank %}
-          {{ block.settings.image | image_url: width: 400, height: 500, crop: 'center' | image_tag: class: 'category-grid__img', loading: 'lazy' }}
+      {%- liquid
+        if block.settings.link != blank
+          assign cat_url = block.settings.link
+        else
+          assign cat_url = block.settings.title | handleize | prepend: '/collections/'
+        endif
+      -%}
+      <a href="{{ cat_url }}" class="category-grid__item" {{ block.shopify_attributes }}>
+        {% if block.settings.image != blank %}
+          {{ block.settings.image | image_url: width: 800 | image_tag: class: 'category-grid__img', loading: 'lazy', sizes: '(min-width: 480px) 25vw, 50vw', alt: block.settings.title }}
         {% elsif block.settings.asset_image != blank %}
           <img src="{{ block.settings.asset_image | asset_url }}" alt="{{ block.settings.title }}" class="category-grid__img" loading="lazy">
         {% else %}
