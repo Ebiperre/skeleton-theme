@@ -3,7 +3,7 @@
     "name": "theme_info",
     "theme_name": "HypeHeat",
     "theme_version": "1.0.0",
-    "theme_author": "HypeHeat",
+    "theme_author": "Perre",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
   },
@@ -100,11 +100,11 @@
         "type": "range",
         "id": "free_shipping_threshold",
         "min": 50,
-        "max": 500,
+        "max": 1000,
         "step": 10,
         "unit": "$",
         "label": "Free shipping threshold",
-        "default": 150
+        "default": 500
       }
     ]
   }

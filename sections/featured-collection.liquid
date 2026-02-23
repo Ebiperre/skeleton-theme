@@ -1,7 +1,7 @@
 {% comment %}
   HypeHeat Featured Collection
   Displays a grid of products from a selected collection.
-  Used on the homepage and any landing page.
+  Filters to in-stock only and randomizes order on each page load.
 {% endcomment %}
 
 {% assign collection = section.settings.collection %}
@@ -23,16 +23,24 @@
     {% endif %}
   </div>
 
-  <div class="featured-collection__grid" style="display:grid; gap:20px 12px; grid-template-columns:repeat(2,1fr);" data-columns="{{ section.settings.columns_desktop }}">
+  <div class="featured-collection__grid" id="FeaturedGrid-{{ section.id }}" style="display:grid; gap:20px 12px; grid-template-columns:repeat(2,1fr);" data-columns="{{ section.settings.columns_desktop }}">
   <style>
     @media(min-width:480px){.featured-collection__grid{grid-template-columns:repeat(3,1fr)!important}}
     @media(min-width:768px){.featured-collection__grid{grid-template-columns:repeat(5,1fr)!important}}
   </style>
     {% if collection %}
-      {% for product in collection.products limit: section.settings.products_to_show %}
-        <div class="reveal reveal--fade-up" style="--reveal-delay: {{ forloop.index0 | times: 0.06 }}s">
+      {%- assign shown = 0 -%}
+      {% for product in collection.products limit: 50 %}
+        {%- if section.settings.only_in_stock and product.available == false -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if shown >= section.settings.products_to_show -%}
+          {%- break -%}
+        {%- endif -%}
+        <div class="reveal reveal--fade-up" style="--reveal-delay: {{ shown | times: 0.06 }}s">
           {% render 'product-card', product: product %}
         </div>
+        {%- assign shown = shown | plus: 1 -%}
       {% endfor %}
     {% else %}
       {% for i in (1..section.settings.products_to_show) %}
@@ -49,6 +57,27 @@
     {% endif %}
   </div>
 </div>
+
+{% if section.settings.randomize and collection %}
+  <script>
+    (function() {
+      var grid = document.getElementById('FeaturedGrid-{{ section.id }}');
+      if (!grid) return;
+      var items = Array.from(grid.querySelectorAll('.reveal'));
+      if (items.length < 2) return;
+      for (var i = items.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = items[i];
+        items[i] = items[j];
+        items[j] = temp;
+      }
+      items.forEach(function(item, idx) {
+        item.style.setProperty('--reveal-delay', (idx * 0.06) + 's');
+        grid.appendChild(item);
+      });
+    })();
+  </script>
+{% endif %}
 
 {% schema %}
 {
@@ -103,6 +132,23 @@
       "type": "checkbox",
       "id": "show_view_all",
       "label": "Show 'View All' link",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Smart Display"
+    },
+    {
+      "type": "checkbox",
+      "id": "only_in_stock",
+      "label": "Only show in-stock products",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "randomize",
+      "label": "Randomize product order",
+      "info": "Shuffles the grid on each page load so customers see different products every visit.",
       "default": true
     }
   ],

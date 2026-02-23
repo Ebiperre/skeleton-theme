@@ -1,13 +1,57 @@
 {% comment %}
-  Split Products — two featured products side by side, editorial layout
+  Split Products — two featured products side by side, editorial layout.
+  Auto-populates from a collection (newest first based on collection sort)
+  or uses manually picked product blocks.
 {% endcomment %}
+
+{%- liquid
+  assign sp_collection = section.settings.collection
+  assign has_manual = false
+  for block in section.blocks limit: 2
+    if block.settings.product != blank
+      assign has_manual = true
+      break
+    endif
+  endfor
+-%}
 
 <div class="split-products full-width">
   <div class="split-products__grid">
-    {% for block in section.blocks limit: 2 %}
-      {% assign product = block.settings.product %}
-      <div class="split-products__item {% if forloop.first %}split-products__item--small{% else %}split-products__item--large{% endif %}" {{ block.shopify_attributes }}>
-        {% if product != blank %}
+    {% if has_manual %}
+      {% for block in section.blocks limit: 2 %}
+        {% assign product = block.settings.product %}
+        <div class="split-products__item {% if forloop.first %}split-products__item--small{% else %}split-products__item--large{% endif %}" {{ block.shopify_attributes }}>
+          {% if product != blank %}
+            <a href="{{ product.url }}" class="split-products__link">
+              <div class="split-products__media">
+                {% if product.featured_image %}
+                  {{ product.featured_image | image_url: width: 1000 | image_tag: class: 'split-products__img', loading: 'lazy', sizes: '(min-width: 768px) 50vw, 100vw', alt: product.title }}
+                {% else %}
+                  <div class="split-products__placeholder"></div>
+                {% endif %}
+              </div>
+              <div class="split-products__info">
+                <span class="split-products__label">{{ block.settings.label }}</span>
+                <span class="split-products__price">{{ product.price | money }}</span>
+              </div>
+            </a>
+          {% else %}
+            <div class="split-products__link">
+              <div class="split-products__media">
+                <div class="split-products__placeholder"></div>
+              </div>
+              <div class="split-products__info">
+                <span class="split-products__label">{{ block.settings.label | default: 'Product Title' }}</span>
+                <span class="split-products__price">$0.00</span>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+    {% elsif sp_collection %}
+      {% for product in sp_collection.products limit: 2 %}
+        <div class="split-products__item {% if forloop.first %}split-products__item--small{% else %}split-products__item--large{% endif %}">
           <a href="{{ product.url }}" class="split-products__link">
             <div class="split-products__media">
               {% if product.featured_image %}
@@ -17,30 +61,42 @@
               {% endif %}
             </div>
             <div class="split-products__info">
-              <span class="split-products__label">{{ block.settings.label }}</span>
+              <span class="split-products__label">{{ product.title }}</span>
               <span class="split-products__price">{{ product.price | money }}</span>
             </div>
           </a>
-        {% else %}
+        </div>
+      {% endfor %}
+
+    {% else %}
+      {% for i in (1..2) %}
+        <div class="split-products__item {% if forloop.first %}split-products__item--small{% else %}split-products__item--large{% endif %}">
           <div class="split-products__link">
             <div class="split-products__media">
               <div class="split-products__placeholder"></div>
             </div>
             <div class="split-products__info">
-              <span class="split-products__label">{{ block.settings.label | default: 'Product Title' }}</span>
+              <span class="split-products__label">Product Title</span>
               <span class="split-products__price">$0.00</span>
             </div>
           </div>
-        {% endif %}
-      </div>
-    {% endfor %}
+        </div>
+      {% endfor %}
+    {% endif %}
   </div>
 </div>
 
 {% schema %}
 {
   "name": "Split Products",
-  "settings": [],
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Auto-populate collection",
+      "info": "Shows the 2 newest products. Set the collection sort to 'Date added: Newest first' in Shopify admin. Manual product blocks below override this."
+    }
+  ],
   "blocks": [
     {
       "type": "product",

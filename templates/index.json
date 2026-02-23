@@ -15,8 +15,8 @@
       "blocks": {
         "cat-1": { "type": "category", "settings": { "title": "Shoes", "asset_image": "shoes.png" } },
         "cat-2": { "type": "category", "settings": { "title": "Collectables", "asset_image": "collectibles.png" } },
-        "cat-3": { "type": "category", "settings": { "title": "Pre-Orders" } },
-        "cat-4": { "type": "category", "settings": { "title": "Clothing" } }
+        "cat-3": { "type": "category", "settings": { "title": "Pre-Orders", "asset_image": "pre-orders.png" } },
+        "cat-4": { "type": "category", "settings": { "title": "Clothing", "asset_image": "clothing.png" } }
       },
       "block_order": ["cat-1", "cat-2", "cat-3", "cat-4"]
     },

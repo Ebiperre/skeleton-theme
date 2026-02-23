@@ -88,7 +88,7 @@
 
   /* --- Cart: Update shipping bar --- */
   function updateShippingBar(totalPrice) {
-    var thresholdCents = (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--free-shipping-threshold')) || 150) * 100;
+    var thresholdCents = (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--free-shipping-threshold')) || 500) * 100;
     var shippingText = document.getElementById('CartShippingText');
     var shippingFill = document.getElementById('CartShippingFill');
 
