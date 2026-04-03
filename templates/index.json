@@ -29,6 +29,9 @@
     },
     "split": {
       "type": "split-products",
+      "settings": {
+        "collection": "all"
+      },
       "blocks": {
         "prod-1": { "type": "product", "settings": { "label": "Best Seller" } },
         "prod-2": { "type": "product", "settings": { "label": "New Drop" } }
@@ -43,7 +46,9 @@
         "collection": "all",
         "products_to_show": 10,
         "columns_desktop": "4",
-        "show_view_all": true
+        "show_view_all": true,
+        "only_in_stock": true,
+        "randomize": false
       }
     },
     "community": {

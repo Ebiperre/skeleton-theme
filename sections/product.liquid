@@ -236,15 +236,6 @@
         </details>
       {% endif %}
 
-      {% if section.settings.returns_info != blank %}
-        <details class="pdp__accordion-item">
-          <summary class="pdp__accordion-header">
-            Returns & Exchanges
-            <svg class="pdp__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </summary>
-          <div class="pdp__accordion-body">{{ section.settings.returns_info }}</div>
-        </details>
-      {% endif %}
     </div>
 
     {%- comment -%} ——— REVIEWS ——— {%- endcomment -%}
@@ -396,12 +387,6 @@
       "id": "shipping_info",
       "label": "Shipping & Delivery info",
       "default": "<p>Free standard shipping on orders over $500. Orders ship within 1-2 business days. Express shipping available at checkout.</p>"
-    },
-    {
-      "type": "richtext",
-      "id": "returns_info",
-      "label": "Returns & Exchanges info",
-      "default": "<p>We accept returns within 14 days of delivery. Items must be unworn with original tags attached. Final sale items are not eligible for return.</p>"
     },
     {
       "type": "header",

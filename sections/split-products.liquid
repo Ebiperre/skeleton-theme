@@ -24,8 +24,8 @@
           {% if product != blank %}
             <a href="{{ product.url }}" class="split-products__link">
               <div class="split-products__media">
-                {% if product.featured_image %}
-                  {{ product.featured_image | image_url: width: 1000 | image_tag: class: 'split-products__img', loading: 'lazy', sizes: '(min-width: 768px) 50vw, 100vw', alt: product.title }}
+                {% if product.images.first %}
+                  {{ product.images.first | image_url: width: 1000 | image_tag: class: 'split-products__img', loading: 'lazy', sizes: '(min-width: 768px) 50vw, 100vw', alt: product.title }}
                 {% else %}
                   <div class="split-products__placeholder"></div>
                 {% endif %}
@@ -50,12 +50,15 @@
       {% endfor %}
 
     {% elsif sp_collection %}
-      {% for product in sp_collection.products limit: 2 %}
-        <div class="split-products__item {% if forloop.first %}split-products__item--small{% else %}split-products__item--large{% endif %}">
+      {%- assign sp_shown = 0 -%}
+      {% for product in sp_collection.products limit: 10 %}
+        {%- unless product.available -%}{%- continue -%}{%- endunless -%}
+        {%- if sp_shown >= 2 -%}{%- break -%}{%- endif -%}
+        <div class="split-products__item {% if sp_shown == 0 %}split-products__item--small{% else %}split-products__item--large{% endif %}">
           <a href="{{ product.url }}" class="split-products__link">
             <div class="split-products__media">
-              {% if product.featured_image %}
-                {{ product.featured_image | image_url: width: 1000 | image_tag: class: 'split-products__img', loading: 'lazy', sizes: '(min-width: 768px) 50vw, 100vw', alt: product.title }}
+              {% if product.images.first %}
+                {{ product.images.first | image_url: width: 1000 | image_tag: class: 'split-products__img', loading: 'lazy', sizes: '(min-width: 768px) 50vw, 100vw', alt: product.title }}
               {% else %}
                 <div class="split-products__placeholder"></div>
               {% endif %}
@@ -66,6 +69,7 @@
             </div>
           </a>
         </div>
+        {%- assign sp_shown = sp_shown | plus: 1 -%}
       {% endfor %}
 
     {% else %}

@@ -11,7 +11,7 @@
     assign is_sold_out = true
   endunless
 
-  assign primary_image = product.featured_image
+  assign primary_image = product.images[0]
   assign secondary_image = product.images[1]
 %}
 
